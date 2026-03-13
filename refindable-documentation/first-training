@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 1 — ¿Qué es un CRM? | Refindable Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080e;--s1:#111119;--s2:#1a1a26;--s3:#22222f;--bd:#2a2a3a;--t:#eeeef5;--tm:#9999b0;--td:#55556a;--ac:#6366f1;--acl:#818cf8;--acs:rgba(99,102,241,.12);--acg:rgba(99,102,241,.3);--g:#10b981;--gs:rgba(16,185,129,.15);--o:#f59e0b;--os:rgba(245,158,11,.12);--r:#ef4444;--rs:rgba(239,68,68,.12);--hs:#ff7a59;--hss:rgba(255,122,89,.12);--rad:14px;--rads:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased}
+.app{height:100vh;display:flex;flex-direction:column}
+/* Topbar */
+.top{height:52px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;z-index:10}
+.top-l{display:flex;align-items:center;gap:10px}
+.brand{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--tm)}.brand span{color:var(--ac)}
+.top-sep{width:1px;height:18px;background:var(--bd)}
+.top-info{font-size:12px;color:var(--td)}
+.top-r{display:flex;align-items:center;gap:14px}
+.score-badge{font-size:12px;color:var(--g);font-weight:600;background:var(--gs);padding:3px 10px;border-radius:100px}
+.pg-text{font-size:11px;color:var(--td);font-family:'Space Grotesk',sans-serif;font-weight:600}
+/* Progress */
+.pg-track{height:3px;background:var(--s2);flex-shrink:0}
+.pg-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--acl));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+/* Slide area */
+.sa{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:32px 20px}
+.sa::-webkit-scrollbar{width:5px}.sa::-webkit-scrollbar-track{background:transparent}.sa::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+.sl{display:none;max-width:780px;width:100%;animation:si .4s ease both}
+.sl.active{display:block}
+@keyframes si{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* Bottom */
+.bot{height:68px;background:var(--s1);border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0}
+.btn{padding:10px 22px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;gap:7px}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.bp{background:var(--s2);color:var(--tm);border:1px solid var(--bd)}.bp:hover:not(:disabled){background:var(--s3);color:var(--t)}
+.bn{background:var(--ac);color:#fff}.bn:hover:not(:disabled){background:var(--acl);transform:translateY(-1px)}
+.bn.locked{background:var(--s3);color:var(--td);cursor:not-allowed;pointer-events:none}
+.sc{font-size:12px;color:var(--td);font-family:'Space Grotesk',sans-serif}
+/* Content styles */
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--acs);border:1px solid rgba(99,102,241,.2);padding:4px 12px;border-radius:100px;font-size:11px;color:var(--acl);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:16px}
+.badge.quiz-b{background:var(--gs);border-color:rgba(16,185,129,.2);color:var(--g)}
+.badge.act-b{background:var(--os);border-color:rgba(245,158,11,.2);color:var(--o)}
+.badge.disc-b{background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.2);color:#a855f7}
+.sl h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:700;line-height:1.15;margin-bottom:14px;letter-spacing:-.02em}
+.sl h1 .hl{background:linear-gradient(135deg,var(--ac),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sl h2{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+.sl h3{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin:20px 0 10px}
+.sl p{color:var(--tm);line-height:1.7;margin-bottom:12px;font-size:15px}.sl p strong{color:var(--t)}
+/* Cards */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+.cd{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rad);padding:20px;transition:all .3s}
+.cd:hover{border-color:var(--ac);transform:translateY(-2px)}
+.cd-i{font-size:26px;margin-bottom:8px;display:block}
+.cd h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin:0 0 4px}
+.cd p{font-size:13px;line-height:1.4;margin:0}
+/* Comparison */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:20px 0;border-radius:var(--rad);overflow:hidden;border:1px solid var(--bd)}
+.cmp-c{padding:18px}
+.cmp-c.bad{background:var(--rs)}.cmp-c.good{background:var(--gs)}
+.cmp-h{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:12px}
+.cmp-c.bad .cmp-h{color:var(--r)}.cmp-c.good .cmp-h{color:var(--g)}
+.cmp-i{font-size:13px;color:var(--tm);padding:5px 0;display:flex;align-items:flex-start;gap:6px;line-height:1.4}
+/* Callout */
+.co{border-radius:var(--rad);padding:16px 20px;margin:16px 0;display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.6}
+.co p{margin:0;font-size:14px}.co.tip{background:var(--gs);border:1px solid rgba(16,185,129,.2)}.co.warn{background:var(--os);border:1px solid rgba(245,158,11,.2)}.co.hs{background:var(--hss);border:1px solid rgba(255,122,89,.2)}
+/* Stats */
+.sr{display:flex;gap:12px;margin:16px 0;flex-wrap:wrap}
+.st{flex:1;min-width:130px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--rad);padding:18px;text-align:center}
+.st-n{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700}
+.st-l{font-size:12px;color:var(--tm);margin-top:2px}
+/* Expandable */
+.ex{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rads);margin-bottom:8px;overflow:hidden}
+.ex-h{padding:14px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background .2s;user-select:none}
+.ex-h:hover{background:var(--s2)}
+.ex-h h4{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.ex-a{transition:transform .3s;color:var(--td);font-size:11px}
+.ex.open .ex-a{transform:rotate(180deg)}
+.ex-b{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.ex.open .ex-b{max-height:800px}
+.ex-c{padding:0 18px 14px;font-size:13px;color:var(--tm);line-height:1.7}
+.ex-c strong{color:var(--t)}
+.ex-c ul{list-style:none;padding:0;margin:6px 0}
+.ex-c li{padding:3px 0 3px 16px;position:relative}
+.ex-c li::before{content:'→';position:absolute;left:0;color:var(--ac);font-size:11px}
+/* Pipeline visual */
+.pipe{display:flex;gap:6px;margin:20px 0;overflow-x:auto;padding-bottom:6px}
+.pipe-s{border-radius:10px;padding:12px 14px;min-width:108px;text-align:center;flex-shrink:0}
+.pipe-s .pipe-e{font-size:18px;margin-bottom:4px}
+.pipe-s .pipe-t{font-size:11px;font-weight:600}
+.pipe-arr{display:flex;align-items:center;color:var(--td);font-size:12px;flex-shrink:0}
+/* Sim nav */
+.sn{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rad);overflow:hidden;margin:16px 0}
+.sn-bar{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--bd)}
+.sn-tab{padding:10px 14px;font-size:12px;font-weight:500;color:var(--td);cursor:pointer;white-space:nowrap;transition:all .2s;border-bottom:2px solid transparent}
+.sn-tab:hover{color:var(--t);background:var(--s2)}
+.sn-tab.active{color:var(--ac);border-bottom-color:var(--ac);background:var(--acs)}
+.sn-c{padding:16px;min-height:70px}
+.sn-p{display:none;font-size:13px;color:var(--tm);line-height:1.6;animation:si .3s ease}
+.sn-p.active{display:block}
+/* Quiz */
+.qq{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rad);padding:24px;margin-bottom:14px;transition:border-color .3s}
+.qq.ok{border-color:var(--g)}.qq.bad{border-color:var(--r)}
+.qq-n{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:var(--ac);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.qq>p{font-size:15px;font-weight:500;color:var(--t);margin-bottom:14px}
+.qo{display:flex;flex-direction:column;gap:7px}
+.qopt{padding:12px 16px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--rads);cursor:pointer;font-size:13px;color:var(--tm);transition:all .2s;display:flex;align-items:center;gap:10px}
+.qopt:hover:not(.dis){border-color:var(--ac);color:var(--t);background:var(--acs)}
+.qopt .mk{width:22px;height:22px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:'Space Grotesk',sans-serif;transition:all .2s}
+.qopt:hover:not(.dis) .mk{border-color:var(--ac);color:var(--ac)}
+.qopt.correct{background:var(--gs);border-color:var(--g);color:var(--g)}.qopt.correct .mk{background:var(--g);border-color:var(--g);color:#fff}
+.qopt.wrong{background:var(--rs);border-color:var(--r);color:var(--r)}.qopt.wrong .mk{background:var(--r);border-color:var(--r);color:#fff}
+.qopt.dis{pointer-events:none;opacity:.35}.qopt.dis.correct{opacity:1}
+.qfb{margin-top:10px;font-size:12px;padding:8px 12px;border-radius:var(--rads);display:none;line-height:1.5}
+.qfb.show{display:block}.qfb.fbok{background:var(--gs);color:var(--g)}.qfb.fbbad{background:var(--rs);color:var(--r)}
+/* Match exercise */
+.match-area{margin:16px 0}
+.match-cols{display:grid;grid-template-columns:1fr 40px 1fr;gap:8px;align-items:start}
+.match-left,.match-right{display:flex;flex-direction:column;gap:8px}
+.match-item{padding:12px 16px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--rads);font-size:13px;cursor:pointer;transition:all .2s;text-align:center;user-select:none}
+.match-item:hover{border-color:var(--ac)}
+.match-item.selected{border-color:var(--ac);background:var(--acs);color:var(--ac)}
+.match-item.matched{border-color:var(--g);background:var(--gs);color:var(--g);pointer-events:none}
+.match-item.wrong-flash{border-color:var(--r);background:var(--rs);color:var(--r)}
+.match-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--td);font-size:18px}
+.match-score{text-align:center;margin-top:12px;font-size:14px;font-weight:600;color:var(--g);display:none}
+/* Scenario */
+.scenario{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rad);padding:24px;margin:16px 0}
+.scenario-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--o);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.scenario p{font-size:14px;color:var(--tm);margin-bottom:12px}
+.scenario-options{display:flex;flex-direction:column;gap:8px}
+.scenario-opt{padding:14px 18px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--rads);cursor:pointer;font-size:13px;color:var(--tm);transition:all .2s}
+.scenario-opt:hover:not(.dis){border-color:var(--o);color:var(--t)}
+.scenario-opt.correct{background:var(--gs);border-color:var(--g);color:var(--g)}
+.scenario-opt.wrong{background:var(--rs);border-color:var(--r);color:var(--r)}
+.scenario-opt.dis{pointer-events:none;opacity:.35}.scenario-opt.dis.correct{opacity:1}
+.scenario-fb{margin-top:10px;font-size:12px;padding:8px 12px;border-radius:var(--rads);display:none;line-height:1.5}
+.scenario-fb.show{display:block}.scenario-fb.sfbok{background:var(--gs);color:var(--g)}.scenario-fb.sfbbad{background:var(--rs);color:var(--r)}
+/* Discussion */
+.disc{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);border-radius:var(--rad);padding:24px;margin:16px 0}
+.disc h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:#a855f7;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.disc p{font-size:14px;color:var(--tm);margin-bottom:8px}
+.disc ul{list-style:none;padding:0}.disc li{padding:4px 0 4px 16px;position:relative;font-size:13px;color:var(--tm)}.disc li::before{content:'💬';position:absolute;left:0;font-size:10px}
+/* Tier table */
+.tt{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.tt th{background:var(--s2);padding:10px 14px;text-align:left;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;letter-spacing:.04em;color:var(--td);border-bottom:1px solid var(--bd)}
+.tt td{padding:10px 14px;border-bottom:1px solid var(--bd);color:var(--tm)}
+.tt tr:last-child td{border-bottom:none}.tt tr:hover td{background:var(--s1)}
+.tag{display:inline-block;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600}
+.tag.f{background:var(--acs);color:var(--ac)}.tag.st{background:var(--gs);color:var(--g)}.tag.pr{background:var(--os);color:var(--o)}.tag.en{background:var(--hss);color:var(--hs)}
+/* Hub grid */
+.hg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:16px 0}
+.hc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rads);padding:16px;transition:all .3s}
+.hc:hover{border-color:var(--ac);transform:translateY(-2px)}
+.hc-i{font-size:22px;margin-bottom:6px}
+.hc h4{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;margin-bottom:3px}
+.hc p{font-size:11px;color:var(--td);margin:0;line-height:1.3}
+/* Glossary */
+.gl{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:8px;margin:16px 0}
+.gl-i{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rads);padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.gl-t{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:var(--ac);min-width:90px;flex-shrink:0}
+.gl-d{font-size:12px;color:var(--tm);line-height:1.4}
+/* Final */
+.final-s{font-family:'Space Grotesk',sans-serif;font-size:56px;font-weight:700;text-align:center;margin:16px 0}
+.final-s.great{color:var(--g)}.final-s.ok{color:var(--o)}.final-s.low{color:var(--r)}
+.cover{position:relative;padding-top:48px}
+.cover-glow{position:absolute;top:-150px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,var(--acg) 0%,transparent 70%);pointer-events:none}
+/* Responsive */
+@media(max-width:640px){.cmp,.match-cols{grid-template-columns:1fr}.cg,.hg{grid-template-columns:1fr}.sr{flex-direction:column}.sl h1{font-size:24px}.bot{padding:0 12px}.btn{padding:9px 14px;font-size:12px}.gl{grid-template-columns:1fr}.match-cols{grid-template-columns:1fr;gap:16px}.match-mid{flex-direction:row;gap:4px}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="top"><div class="top-l"><div class="brand"><span>Refindable</span> Academy</div><div class="top-sep"></div><div class="top-info">Sesión 1 · Trainees</div></div><div class="top-r"><div class="score-badge" id="scoreBadge">✨ 0 pts</div><div class="pg-text" id="pgText">1 / 22</div></div></div>
+<div class="pg-track"><div class="pg-fill" id="pgFill"></div></div>
+<div class="sa">
+
+<!-- S0: Cover -->
+<div class="sl active" data-s="0">
+<div class="cover"><div class="cover-glow"></div>
+<div class="badge">📘 Sesión 1 — 14 Marzo 2026</div>
+<h1>¿Qué es un <span class="hl">CRM</span>?<br>+ Navegación HubSpot</h1>
+<p>Todo lo que necesitás saber para entender el CRM, por qué importa, y cómo moverte en HubSpot sin perderte.</p>
+<div style="display:flex;gap:16px;margin-top:24px;flex-wrap:wrap">
+<span style="font-size:12px;color:var(--td)">⏱ 30-45 min</span>
+<span style="font-size:12px;color:var(--td)">🧩 22 slides</span>
+<span style="font-size:12px;color:var(--td)">🧠 3 quizzes + 2 ejercicios + 3 escenarios</span>
+</div></div></div>
+
+<!-- S1 -->
+<div class="sl" data-s="1">
+<div class="badge">01 · Fundamentos</div>
+<h2>¿Qué es un CRM?</h2>
+<p><strong>CRM</strong> = <strong>Customer Relationship Management</strong> (Gestión de la Relación con el Cliente).</p>
+<p>Es la <strong>fuente de verdad</strong> de una empresa sobre sus clientes. Donde vive toda la info de quién te compra, quién podría comprarte, y cómo interactúan con vos.</p>
+<div class="co tip"><div>💡</div><div><p><strong>Analogía:</strong> Imaginate que tenés un negocio con 500 clientes. ¿Cómo te acordás quién te compró qué, cuándo fue la última vez que hablaste con cada uno, y quién tiene una queja pendiente? Eso es un CRM. El cerebro externo de tu negocio.</p></div></div>
+</div>
+
+<!-- S2 -->
+<div class="sl" data-s="2">
+<div class="badge">01 · Fundamentos</div>
+<h2>Antes vs. Después</h2>
+<div class="cmp"><div class="cmp-c bad"><div class="cmp-h">❌ Sin CRM</div><div class="cmp-i"><span>•</span>Contactos en planillas separadas</div><div class="cmp-i"><span>•</span>No sabés quién habló con quién</div><div class="cmp-i"><span>•</span>Se pierden oportunidades</div><div class="cmp-i"><span>•</span>Reportes manuales</div><div class="cmp-i"><span>•</span>Cada persona trabaja diferente</div></div><div class="cmp-c good"><div class="cmp-h">✅ Con CRM</div><div class="cmp-i"><span>•</span>Base de datos centralizada</div><div class="cmp-i"><span>•</span>Timeline de interacciones</div><div class="cmp-i"><span>•</span>Pipeline visual</div><div class="cmp-i"><span>•</span>Dashboards en tiempo real</div><div class="cmp-i"><span>•</span>Procesos estandarizados</div></div></div>
+<div class="disc"><h3>💬 Para conversar</h3><p>¿Alguna vez les pasó que perdieron un cliente o una venta porque no tenían organizada la info? ¿Cómo manejan eso hoy?</p></div>
+</div>
+
+<!-- S3 -->
+<div class="sl" data-s="3">
+<div class="badge">02 · Impacto</div>
+<h2>Los números que importan</h2>
+<p>Las empresas que usan CRM correctamente ven mejoras concretas:</p>
+<div class="sr"><div class="st"><div class="st-n" style="color:var(--g)">+29%</div><div class="st-l">Ventas</div></div><div class="st"><div class="st-n" style="color:var(--ac)">+42%</div><div class="st-l">Pronósticos</div></div><div class="st"><div class="st-n" style="color:var(--o)">+34%</div><div class="st-l">Productividad</div></div><div class="st"><div class="st-n" style="color:var(--hs)">+47%</div><div class="st-l">Retención</div></div></div>
+<div class="co warn"><div>⚠️</div><div><p><strong>Pero ojo:</strong> Un CRM mal implementado es PEOR que no tener CRM. Data sucia, nadie lo usa, mal configurado → más problemas de los que resuelve. Por eso nosotros necesitamos entender esto bien.</p></div></div>
+</div>
+
+<!-- S4: Ejemplo real -->
+<div class="sl" data-s="4">
+<div class="badge act-b">🎯 Ejemplo real</div>
+<h2>¿Cómo se ve esto en la vida real?</h2>
+<p><strong>Sin CRM:</strong> Tu vendedor Juan habla con un cliente por teléfono. Anota en un post-it "llamar de vuelta el jueves". El jueves se olvida. El cliente se enoja. Se va a la competencia. Nadie se entera hasta 3 meses después cuando revisan la planilla de Excel.</p>
+<p><strong>Con CRM:</strong> Juan habla con el cliente. Logea la llamada en el CRM. Crea una tarea automática para el jueves. El jueves le salta la notificación. Llama. El cliente está contento. El manager ve todo en el dashboard. Si Juan se enferma, otro vendedor puede ver todo el historial y cubrir.</p>
+<div class="disc"><h3>💬 Para conversar</h3><p>¿En qué otros escenarios se les ocurre que un CRM salvaría la situación?</p><ul><li>¿Qué pasa cuando se va un vendedor de la empresa?</li><li>¿Cómo hacen seguimiento de propuestas enviadas?</li><li>¿Cómo saben si un cliente está contento o no?</li></ul></div>
+</div>
+
+<!-- S5: Quiz 1 -->
+<div class="sl" data-s="5" data-quiz="1">
+<div class="badge quiz-b">🧠 Quiz 1 — Respondé para avanzar</div>
+<h2>Fundamentos del CRM</h2>
+<div class="qq" id="q1"><div class="qq-n">Pregunta 1</div><p>¿Qué significa CRM?</p><div class="qo"><div class="qopt" onclick="ans(this,'q1',0)"><div class="mk">A</div>Central Resource Manager</div><div class="qopt" onclick="ans(this,'q1',1)"><div class="mk">B</div>Customer Relationship Management</div><div class="qopt" onclick="ans(this,'q1',0)"><div class="mk">C</div>Client Record Module</div></div><div class="qfb" id="q1-fb"></div></div>
+<div class="qq" id="q2"><div class="qq-n">Pregunta 2</div><p>¿Qué pasa con un CRM mal implementado?</p><div class="qo"><div class="qopt" onclick="ans(this,'q2',0)"><div class="mk">A</div>Funciona igual, solo más lento</div><div class="qopt" onclick="ans(this,'q2',1)"><div class="mk">B</div>Es peor que no tener CRM</div><div class="qopt" onclick="ans(this,'q2',0)"><div class="mk">C</div>Se arregla solo con el tiempo</div></div><div class="qfb" id="q2-fb"></div></div>
+</div>
+
+<!-- S6: Pilares -->
+<div class="sl" data-s="6">
+<div class="badge">03 · Estructura</div>
+<h2>Los objetos del CRM</h2>
+<p>Todo CRM organiza la información en <strong>objetos</strong>. Hacé clic en cada uno:</p>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>👤 Contactos</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p><strong>Personas individuales.</strong> El email es su ID único.</p><p><strong>Ej:</strong> Juan Pérez — juan@empresa.com — Dir. Marketing</p><ul><li>Nombre, email, teléfono, cargo, empresa</li><li>Se asocia a una Company</li><li>Tiene un timeline con todas las interacciones</li></ul></div></div></div>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>🏢 Empresas (Companies)</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p><strong>Organizaciones.</strong> Se identifican por el dominio del email.</p><p><strong>Ej:</strong> Empresa ABC — empresaabc.com — Industria: Tech — 50 empleados</p><ul><li>Múltiples contactos pueden estar en una empresa</li><li>Se asocia automáticamente por dominio</li><li>Revenue, industria, país, tamaño</li></ul></div></div></div>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>💰 Negocios (Deals)</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p><strong>Oportunidades de venta.</strong> Cada deal tiene monto, etapa, fecha de cierre.</p><p><strong>Ej:</strong> "CRM para ABC" — $15,000 — Etapa: Propuesta Enviada</p><ul><li>Se mueven por un Pipeline</li><li>Asociados a contactos y empresas</li><li>Tienen un owner (vendedor responsable)</li></ul></div></div></div>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>🎫 Tickets</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p><strong>Solicitudes de soporte.</strong> Cuando un cliente tiene un problema.</p><ul><li>Tiene prioridad, categoría, status</li><li>Se asocia al contacto y empresa</li><li>Pasa por un pipeline de soporte</li></ul></div></div></div>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>📋 Actividades</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p>Todas las <strong>interacciones</strong> que se registran en el CRM:</p><ul><li><strong>Emails</strong> → se logean automáticamente con Gmail/Outlook</li><li><strong>Llamadas</strong> → con notas y duración</li><li><strong>Reuniones</strong> → vía meeting scheduler</li><li><strong>Notas</strong> → información libre</li><li><strong>Tareas</strong> → to-dos para el equipo</li></ul></div></div></div>
+</div>
+
+<!-- S7: Asociaciones visual -->
+<div class="sl" data-s="7">
+<div class="badge">03 · Estructura</div>
+<h2>Cómo se conectan los objetos</h2>
+<p>Los objetos no viven aislados. Se <strong>asocian</strong> entre sí:</p>
+<div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--rad);padding:24px;margin:16px 0;text-align:center">
+<div style="font-size:14px;color:var(--tm);line-height:2.2">
+<span style="background:var(--acs);padding:6px 14px;border-radius:8px;color:var(--ac);font-weight:600">👤 Juan Pérez</span>
+<br>↕ trabaja en<br>
+<span style="background:var(--gs);padding:6px 14px;border-radius:8px;color:var(--g);font-weight:600">🏢 Empresa ABC</span>
+<br>↕ tiene un<br>
+<span style="background:var(--os);padding:6px 14px;border-radius:8px;color:var(--o);font-weight:600">💰 Deal: Implementación CRM — $15K</span>
+<br>↕ generó un<br>
+<span style="background:var(--hss);padding:6px 14px;border-radius:8px;color:var(--hs);font-weight:600">🎫 Ticket: Problema con importación</span>
+</div>
+</div>
+<div class="co tip"><div>💡</div><div><p><strong>Clave:</strong> Cuando abrís cualquier registro, ves todo lo asociado. Si abrís a Juan, ves su empresa, sus deals, sus tickets, sus emails, todo.</p></div></div>
+</div>
+
+<!-- S8: Pipeline -->
+<div class="sl" data-s="8">
+<div class="badge">03 · Estructura</div>
+<h2>¿Qué es un Pipeline?</h2>
+<p>El proceso visual por etapas. Se ve como un tablero Kanban donde arrastrás deals:</p>
+<div class="pipe">
+<div class="pipe-s" style="background:var(--acs)"><div class="pipe-e">🆕</div><div class="pipe-t" style="color:var(--ac)">Nuevo</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--s1);border:1px solid var(--bd)"><div class="pipe-e">📞</div><div class="pipe-t" style="color:var(--tm)">Contactado</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--s1);border:1px solid var(--bd)"><div class="pipe-e">📅</div><div class="pipe-t" style="color:var(--tm)">Reunión</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--s1);border:1px solid var(--bd)"><div class="pipe-e">📄</div><div class="pipe-t" style="color:var(--tm)">Propuesta</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--s1);border:1px solid var(--bd)"><div class="pipe-e">🤝</div><div class="pipe-t" style="color:var(--tm)">Negociación</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--gs)"><div class="pipe-e">🏆</div><div class="pipe-t" style="color:var(--g)">Ganado</div></div>
+</div>
+<p>Cada deal se mueve de izquierda a derecha. Si se pierde, va a "Cerrado Perdido". El pipeline te dice exactamente dónde está cada negociación.</p>
+<div class="disc"><h3>💬 Para conversar</h3><p>¿Qué etapas tendría el pipeline de un negocio que vende software? ¿Y uno que vende servicios de consultoría? ¿Son iguales?</p></div>
+</div>
+
+<!-- S9: Ejercicio Matching -->
+<div class="sl" data-s="9" data-quiz="2">
+<div class="badge act-b">🎯 Ejercicio — Conectá los conceptos</div>
+<h2>¿Qué objeto es cada cosa?</h2>
+<p>Hacé clic en un item de la izquierda y después en su match de la derecha:</p>
+<div class="match-area">
+<div class="match-cols">
+<div class="match-left" id="ml">
+<div class="match-item" data-m="a" onclick="matchClick(this,'l')">juan@empresa.com</div>
+<div class="match-item" data-m="b" onclick="matchClick(this,'l')">$15,000 — Propuesta enviada</div>
+<div class="match-item" data-m="c" onclick="matchClick(this,'l')">Empresa ABC — Tech — 50 empl.</div>
+<div class="match-item" data-m="d" onclick="matchClick(this,'l')">Problema con la facturación</div>
+<div class="match-item" data-m="e" onclick="matchClick(this,'l')">Llamada de 15 min con cliente</div>
+</div>
+<div class="match-mid">↔<br>↔<br>↔<br>↔<br>↔</div>
+<div class="match-right" id="mr">
+<div class="match-item" data-m="d" onclick="matchClick(this,'r')">🎫 Ticket</div>
+<div class="match-item" data-m="a" onclick="matchClick(this,'r')">👤 Contacto</div>
+<div class="match-item" data-m="e" onclick="matchClick(this,'r')">📋 Actividad</div>
+<div class="match-item" data-m="b" onclick="matchClick(this,'r')">💰 Deal</div>
+<div class="match-item" data-m="c" onclick="matchClick(this,'r')">🏢 Company</div>
+</div>
+</div>
+<div class="match-score" id="matchScore"></div>
+</div>
+</div>
+
+<!-- S10: Quiz 2 -->
+<div class="sl" data-s="10" data-quiz="3">
+<div class="badge quiz-b">🧠 Quiz 2 — Pilares del CRM</div>
+<h2>Verificación rápida</h2>
+<div class="qq" id="q3"><div class="qq-n">Pregunta 1</div><p>¿Cuál es el identificador más común de un Contacto?</p><div class="qo"><div class="qopt" onclick="ans(this,'q3',0)"><div class="mk">A</div>Nombre completo</div><div class="qopt" onclick="ans(this,'q3',1)"><div class="mk">B</div>Email</div><div class="qopt" onclick="ans(this,'q3',0)"><div class="mk">C</div>Número de teléfono</div></div><div class="qfb" id="q3-fb"></div></div>
+<div class="qq" id="q4"><div class="qq-n">Pregunta 2</div><p>¿Qué es un Pipeline?</p><div class="qo"><div class="qopt" onclick="ans(this,'q4',0)"><div class="mk">A</div>Un tipo de reporte</div><div class="qopt" onclick="ans(this,'q4',0)"><div class="mk">B</div>Un contacto VIP</div><div class="qopt" onclick="ans(this,'q4',1)"><div class="mk">C</div>El proceso por etapas de una venta</div></div><div class="qfb" id="q4-fb"></div></div>
+</div>
+
+<!-- S11: HubSpot intro -->
+<div class="sl" data-s="11">
+<div class="badge">04 · HubSpot</div>
+<h2>HubSpot: el CRM que usamos</h2>
+<p>Empezó en 2006 como herramienta de marketing. Hoy es una suite completa. El CRM base es <strong>gratis</strong>.</p>
+<div class="co hs"><div>🔶</div><div><p><strong>Refindable es HubSpot Solutions Partner.</strong> Implementamos, configuramos y optimizamos HubSpot para clientes. Dominar esto es parte de nuestro trabajo.</p></div></div>
+<h3>Niveles (Tiers)</h3>
+<table class="tt"><thead><tr><th>Tier</th><th>Para quién</th><th>Qué agrega</th></tr></thead><tbody>
+<tr><td><span class="tag f">Free</span></td><td>Arrancan</td><td>CRM básico, contactos, deals</td></tr>
+<tr><td><span class="tag st">Starter</span></td><td>Equipos chicos</td><td>+ email mkt, ads, chat</td></tr>
+<tr><td><span class="tag pr">Professional</span></td><td>Escalar</td><td>+ workflows, reportes, A/B</td></tr>
+<tr><td><span class="tag en">Enterprise</span></td><td>Ops complejas</td><td>+ custom objects, partitioning</td></tr>
+</tbody></table>
+</div>
+
+<!-- S12: Los Hubs -->
+<div class="sl" data-s="12">
+<div class="badge">04 · HubSpot</div>
+<h2>Los Hubs</h2>
+<p>HubSpot se divide en módulos especializados que <strong>comparten la misma base de datos</strong>:</p>
+<div class="hg">
+<div class="hc"><div class="hc-i">🎯</div><h4>Marketing Hub</h4><p>Atraer leads. Emails, ads, landing pages, social.</p></div>
+<div class="hc"><div class="hc-i">💼</div><h4>Sales Hub</h4><p>Cerrar deals. Pipeline, sequences, quotes.</p></div>
+<div class="hc"><div class="hc-i">🎧</div><h4>Service Hub</h4><p>Retener clientes. Tickets, KB, feedback.</p></div>
+<div class="hc"><div class="hc-i">⚙️</div><h4>Operations Hub</h4><p>Conectar data. Sync, quality, datasets.</p></div>
+<div class="hc"><div class="hc-i">🌐</div><h4>Content Hub</h4><p>Crear contenido web. Blog, pages.</p></div>
+<div class="hc"><div class="hc-i">🛒</div><h4>Commerce Hub</h4><p>Pagos. Invoices, subscriptions.</p></div>
+</div>
+<div class="co tip"><div>💡</div><div><p><strong>Clave:</strong> Un contacto que entra por Marketing aparece en Sales y Service. No son sistemas separados.</p></div></div>
+</div>
+
+<!-- S13: Navegación -->
+<div class="sl" data-s="13">
+<div class="badge">05 · Navegación</div>
+<h2>Navegación en HubSpot</h2>
+<p>Hacé clic en cada menú para ver qué hay adentro:</p>
+<div class="sn"><div class="sn-bar">
+<div class="sn-tab active" onclick="st(this,0)">🏠 Home</div>
+<div class="sn-tab" onclick="st(this,1)">CRM</div>
+<div class="sn-tab" onclick="st(this,2)">Marketing</div>
+<div class="sn-tab" onclick="st(this,3)">Sales</div>
+<div class="sn-tab" onclick="st(this,4)">Service</div>
+<div class="sn-tab" onclick="st(this,5)">Automations</div>
+<div class="sn-tab" onclick="st(this,6)">Reporting</div>
+</div><div class="sn-c">
+<div class="sn-p active"><strong>Home:</strong> Dashboard principal. Tareas pendientes, actividad reciente, métricas clave. Tu punto de partida cada vez que entrás.</div>
+<div class="sn-p"><strong>CRM:</strong> Donde vive toda la data. Contactos, Empresas, Deals, Tickets, y objetos custom. Acá vas a pasar la mayor parte del tiempo.</div>
+<div class="sn-p"><strong>Marketing:</strong> Atraer leads. Email marketing, formularios, landing pages, redes sociales, ads, SEO, campañas.</div>
+<div class="sn-p"><strong>Sales:</strong> Herramientas de ventas. Deals, tareas, documents, sequences, meeting scheduler, quotes.</div>
+<div class="sn-p"><strong>Service:</strong> Atención al cliente. Tickets, knowledge base, feedback surveys, customer portal.</div>
+<div class="sn-p"><strong>Automations:</strong> Workflows y sequences. Automatizás procesos repetitivos, envíos de emails, asignación de tareas.</div>
+<div class="sn-p"><strong>Reporting:</strong> Dashboards, reportes custom, analytics. Donde medís todo.</div>
+</div></div>
+</div>
+
+<!-- S14: Acciones diarias -->
+<div class="sl" data-s="14">
+<div class="badge">05 · Navegación</div>
+<h2>5 acciones que van a usar todos los días</h2>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>🔍 1. Buscar un contacto</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p>Barra de búsqueda global arriba del todo, o <strong>Ctrl+K / Cmd+K</strong>. Busca por nombre, email, empresa, o cualquier propiedad.</p></div></div></div>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>👁 2. Ver un registro</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p>Clic en un contacto → ficha completa: datos, timeline, deals asociados, empresas, interacciones.</p></div></div></div>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>➕ 3. Crear registros</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p>Desde cualquier vista de objetos, botón <strong>"Create"</strong> arriba a la derecha. Completás propiedades y guardás.</p></div></div></div>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>🔎 4. Filtrar y hacer vistas</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p>En cualquier lista podés agregar filtros. Guardá filtros como <strong>"vistas"</strong> para acceder rápido. Ej: "Mis contactos", "Deals esta semana".</p></div></div></div>
+<div class="ex" onclick="this.classList.toggle('open')"><div class="ex-h"><h4>📝 5. Loguear actividades</h4><span class="ex-a">▼</span></div><div class="ex-b"><div class="ex-c"><p>Desde el registro: <strong>"Log activity"</strong> → tipo (call, email, meeting, note) → detalles → guardar. Todo queda en el timeline.</p></div></div></div>
+</div>
+
+<!-- S15: Escenario 1 -->
+<div class="sl" data-s="15" data-quiz="4">
+<div class="badge act-b">🎬 Escenario — ¿Qué harías?</div>
+<h2>Caso práctico #1</h2>
+<div class="scenario" id="sc1"><div class="scenario-title">📞 Situación</div><p>Recibís una llamada de <strong>María López</strong> de <strong>TechCorp</strong>. Te dice que está interesada en contratar servicios de CRM. Le pasaste un precio de <strong>$8,000</strong> y quedaron en hablar la semana que viene.</p><p><strong>¿Qué registrarías en HubSpot?</strong></p>
+<div class="scenario-options">
+<div class="scenario-opt" onclick="scAns(this,'sc1',0)">Solo creo un Contacto con su nombre y email</div>
+<div class="scenario-opt" onclick="scAns(this,'sc1',0)">Solo creo un Deal por $8,000</div>
+<div class="scenario-opt" onclick="scAns(this,'sc1',1)">Contacto + Company + Deal + Logueo la llamada + Tarea para la semana que viene</div>
+<div class="scenario-opt" onclick="scAns(this,'sc1',0)">Le mando un email y listo</div>
+</div>
+<div class="scenario-fb" id="sc1-fb"></div></div>
+</div>
+
+<!-- S16: Escenario 2 -->
+<div class="sl" data-s="16" data-quiz="5">
+<div class="badge act-b">🎬 Escenario — ¿Qué harías?</div>
+<h2>Caso práctico #2</h2>
+<div class="scenario" id="sc2"><div class="scenario-title">😡 Situación</div><p>Un cliente existente, <strong>Pedro de DataFlow</strong>, te escribe enojado porque le están cobrando doble. Tu compañera Sol habló con él ayer pero no sabés qué le dijo.</p><p><strong>¿Dónde buscás la info?</strong></p>
+<div class="scenario-options">
+<div class="scenario-opt" onclick="scAns(this,'sc2',0)">Le mando un WhatsApp a Sol preguntando</div>
+<div class="scenario-opt" onclick="scAns(this,'sc2',1)">Abro el contacto de Pedro en HubSpot y reviso el timeline</div>
+<div class="scenario-opt" onclick="scAns(this,'sc2',0)">Busco en mi bandeja de email</div>
+<div class="scenario-opt" onclick="scAns(this,'sc2',0)">Le digo a Pedro que me mande un email</div>
+</div>
+<div class="scenario-fb" id="sc2-fb"></div></div>
+</div>
+
+<!-- S17: Lifecycle Stages -->
+<div class="sl" data-s="17">
+<div class="badge">06 · Conceptos clave</div>
+<h2>Lifecycle Stages</h2>
+<p>Es la <strong>etapa del journey</strong> de un contacto. No confundir con el pipeline (que es de deals).</p>
+<div class="pipe">
+<div class="pipe-s" style="background:var(--s1);border:1px solid var(--bd)"><div class="pipe-e">📧</div><div class="pipe-t" style="color:var(--tm)">Subscriber</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--s1);border:1px solid var(--bd)"><div class="pipe-e">🙋</div><div class="pipe-t" style="color:var(--tm)">Lead</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--acs)"><div class="pipe-e">🎯</div><div class="pipe-t" style="color:var(--ac)">MQL</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--os)"><div class="pipe-e">📊</div><div class="pipe-t" style="color:var(--o)">SQL</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--hss)"><div class="pipe-e">💰</div><div class="pipe-t" style="color:var(--hs)">Opportunity</div></div>
+<div class="pipe-arr">→</div>
+<div class="pipe-s" style="background:var(--gs)"><div class="pipe-e">🏆</div><div class="pipe-t" style="color:var(--g)">Customer</div></div>
+</div>
+<p><strong>MQL</strong> = Marketing Qualified Lead (marketing dice "este tiene potencial")<br><strong>SQL</strong> = Sales Qualified Lead (ventas dice "este está listo para hablar")</p>
+<div class="co tip"><div>💡</div><div><p><strong>Diferencia clave:</strong> El <strong>Lifecycle Stage</strong> es del contacto (en qué etapa del funnel está). El <strong>Pipeline</strong> es del deal (en qué etapa de la negociación está). Son cosas distintas.</p></div></div>
+</div>
+
+<!-- S18: Properties -->
+<div class="sl" data-s="18">
+<div class="badge">06 · Conceptos clave</div>
+<h2>Properties (Propiedades)</h2>
+<p>Las propiedades son los <strong>campos de datos</strong> de cada objeto. HubSpot viene con muchas por defecto, pero podés crear custom.</p>
+<div class="cg">
+<div class="cd"><div class="cd-i">👤</div><h3>Contacto</h3><p>First Name, Last Name, Email, Phone, Job Title, Lifecycle Stage, Lead Status...</p></div>
+<div class="cd"><div class="cd-i">🏢</div><h3>Company</h3><p>Name, Domain, Industry, Annual Revenue, Number of Employees, Country...</p></div>
+<div class="cd"><div class="cd-i">💰</div><h3>Deal</h3><p>Deal Name, Amount, Close Date, Deal Stage, Pipeline, Deal Owner...</p></div>
+</div>
+<p>Tipos de propiedades: texto, número, fecha, dropdown, checkbox, y más. Esto lo vemos en profundidad en la Sesión 3.</p>
+</div>
+
+<!-- S19: Escenario 3 -->
+<div class="sl" data-s="19" data-quiz="6">
+<div class="badge act-b">🎬 Escenario final</div>
+<h2>Caso práctico #3</h2>
+<div class="scenario" id="sc3"><div class="scenario-title">🤔 Situación</div><p>Tu jefe te pide: "Necesito saber cuántos deals tenemos abiertos arriba de $10,000, quién es el owner de cada uno, y en qué etapa están."</p><p><strong>¿Dónde lo encontrás en HubSpot?</strong></p>
+<div class="scenario-options">
+<div class="scenario-opt" onclick="scAns(this,'sc3',0)">En el menú Marketing → Campaigns</div>
+<div class="scenario-opt" onclick="scAns(this,'sc3',0)">En Service → Tickets</div>
+<div class="scenario-opt" onclick="scAns(this,'sc3',1)">En CRM → Deals, filtro por Amount > $10K, veo columnas de Stage y Owner</div>
+<div class="scenario-opt" onclick="scAns(this,'sc3',0)">En Reporting → hago un reporte nuevo</div>
+</div>
+<div class="scenario-fb" id="sc3-fb"></div></div>
+</div>
+
+<!-- S20: Quiz Final -->
+<div class="sl" data-s="20" data-quiz="7">
+<div class="badge quiz-b">🧠 Quiz Final</div>
+<h2>Últimas preguntas</h2>
+<div class="qq" id="q5"><div class="qq-n">Pregunta 1</div><p>¿Qué comparten todos los Hubs de HubSpot?</p><div class="qo"><div class="qopt" onclick="ans(this,'q5',0)"><div class="mk">A</div>Son sistemas separados</div><div class="qopt" onclick="ans(this,'q5',1)"><div class="mk">B</div>La misma base de datos (CRM)</div><div class="qopt" onclick="ans(this,'q5',0)"><div class="mk">C</div>Cada Hub necesita cuenta diferente</div></div><div class="qfb" id="q5-fb"></div></div>
+<div class="qq" id="q6"><div class="qq-n">Pregunta 2</div><p>¿Cuál es la diferencia entre Lifecycle Stage y Pipeline?</p><div class="qo"><div class="qopt" onclick="ans(this,'q6',1)"><div class="mk">A</div>Lifecycle = etapa del contacto. Pipeline = etapa del deal.</div><div class="qopt" onclick="ans(this,'q6',0)"><div class="mk">B</div>Son lo mismo con nombres diferentes</div><div class="qopt" onclick="ans(this,'q6',0)"><div class="mk">C</div>Lifecycle es para marketing, Pipeline para service</div></div><div class="qfb" id="q6-fb"></div></div>
+<div class="qq" id="q7"><div class="qq-n">Pregunta 3</div><p>¿Dónde encontrás Workflows en HubSpot?</p><div class="qo"><div class="qopt" onclick="ans(this,'q7',0)"><div class="mk">A</div>En CRM</div><div class="qopt" onclick="ans(this,'q7',0)"><div class="mk">B</div>En Reporting</div><div class="qopt" onclick="ans(this,'q7',1)"><div class="mk">C</div>En Automations</div></div><div class="qfb" id="q7-fb"></div></div>
+</div>
+
+<!-- S21: Glosario -->
+<div class="sl" data-s="21">
+<div class="badge">📖 Referencia</div>
+<h2>Glosario rápido</h2>
+<p>Para tener a mano. No hace falta memorizar todo, pero saber dónde buscar.</p>
+<div class="gl">
+<div class="gl-i"><div class="gl-t">Object</div><div class="gl-d">Tipo de registro: Contact, Company, Deal, Ticket</div></div>
+<div class="gl-i"><div class="gl-t">Record</div><div class="gl-d">Una entrada individual ("Juan" = un record)</div></div>
+<div class="gl-i"><div class="gl-t">Property</div><div class="gl-d">Campo de datos (nombre, email, monto...)</div></div>
+<div class="gl-i"><div class="gl-t">Association</div><div class="gl-d">Relación entre objetos (Contact ↔ Company)</div></div>
+<div class="gl-i"><div class="gl-t">Pipeline</div><div class="gl-d">Proceso por etapas de un Deal o Ticket</div></div>
+<div class="gl-i"><div class="gl-t">Lifecycle Stage</div><div class="gl-d">Etapa del journey del contacto</div></div>
+<div class="gl-i"><div class="gl-t">Workflow</div><div class="gl-d">Automatización que se dispara por condición</div></div>
+<div class="gl-i"><div class="gl-t">Owner</div><div class="gl-d">Persona responsable de un registro</div></div>
+<div class="gl-i"><div class="gl-t">View</div><div class="gl-d">Filtro guardado para ver ciertos registros</div></div>
+<div class="gl-i"><div class="gl-t">Dashboard</div><div class="gl-d">Página con múltiples reportes visuales</div></div>
+</div>
+</div>
+
+<!-- S22: Resultado -->
+<div class="sl" data-s="22">
+<div class="badge">🎉 Fin de la sesión</div>
+<h2>Tu resultado</h2>
+<div class="final-s" id="finalS">—</div>
+<p style="text-align:center;font-size:16px" id="finalM">Completá los quizzes y ejercicios para ver tu score.</p>
+<div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--rad);padding:20px;margin:24px 0">
+<h3 style="font-family:'Space Grotesk',sans-serif;font-size:16px;margin:0 0 12px">📌 Para la próxima sesión</h3>
+<p style="font-size:14px">La <strong>Sesión 2</strong> es sobre <strong>Contactos, Companies y Deals</strong> en profundidad. Vamos a crear registros, asociarlos, y trabajar con datos reales.</p>
+<p style="font-size:14px"><strong>Tarea opcional:</strong> Entrá a un portal de HubSpot y explorá un poco. Buscá un contacto, mirá su timeline, y navegá los menús.</p>
+</div>
+<p style="text-align:center;color:var(--td);font-size:13px;margin-top:20px">Refindable Academy 2026 · Track Trainees · Sesión 1 de 12</p>
+</div>
+
+</div>
+<div class="bot"><button class="btn bp" id="bP" onclick="prev()" disabled>← Anterior</button><div class="sc" id="sCt">1 / 22</div><button class="btn bn" id="bN" onclick="next()">Siguiente →</button></div>
+</div>
+
+<script>
+const T=23;let cur=0,pts=0,ad={},mSel={l:null,r:null},mDone=0,mTotal=5;
+const qSlides={5:['q1','q2'],10:['q3','q4'],20:['q5','q6','q7']};
+const scSlides={15:'sc1',16:'sc2',19:'sc3'};
+
+function upd(){
+document.querySelectorAll('.sl').forEach(s=>s.classList.remove('active'));
+document.querySelector(`[data-s="${cur}"]`).classList.add('active');
+document.getElementById('pgFill').style.width=((cur/(T-1))*100)+'%';
+document.getElementById('pgText').textContent=`${cur+1} / ${T}`;
+document.getElementById('sCt').textContent=`${cur+1} / ${T}`;
+document.getElementById('scoreBadge').textContent=`✨ ${pts} pts`;
+document.getElementById('bP').disabled=cur===0;
+const b=document.getElementById('bN');
+if(cur===T-1){b.style.display='none';updFinal();return}
+b.style.display='flex';
+const sl=document.querySelector(`[data-s="${cur}"]`);
+const qz=sl.dataset.quiz;
+if(qz){
+  let locked=false;
+  if(qSlides[cur]){locked=!qSlides[cur].every(q=>ad[q]!==undefined)}
+  if(scSlides[cur]){locked=ad[scSlides[cur]]===undefined}
+  if(cur===9){locked=mDone<mTotal}// matching
+  if(locked){b.classList.add('locked');b.textContent='🔒 Completá para avanzar'}
+  else{b.classList.remove('locked');b.textContent='Siguiente →'}
+}else{b.classList.remove('locked');b.textContent=cur===T-2?'Ver resultado →':'Siguiente →'}
+document.querySelector('.sa').scrollTop=0;
+}
+
+function next(){const b=document.getElementById('bN');if(b.classList.contains('locked'))return;if(cur<T-1){cur++;upd()}}
+function prev(){if(cur>0){cur--;upd()}}
+
+function ans(el,qId,c){
+if(ad[qId]!==undefined)return;
+ad[qId]=c;if(c)pts+=10;
+const q=document.getElementById(qId),opts=q.querySelectorAll('.qopt'),fb=document.getElementById(qId+'-fb');
+opts.forEach(o=>o.classList.add('dis'));
+if(c){el.classList.add('correct');fb.textContent='✅ ¡Correcto! +10 pts';fb.className='qfb show fbok';q.classList.add('ok')}
+else{el.classList.add('wrong');opts.forEach(o=>{if(o.getAttribute('onclick')?.includes(',1)')){o.classList.remove('dis');o.classList.add('correct')}});fb.textContent='❌ Incorrecta.';fb.className='qfb show fbbad';q.classList.add('bad')}
+upd();
+}
+
+function scAns(el,scId,c){
+if(ad[scId]!==undefined)return;
+ad[scId]=c;if(c)pts+=15;
+const sc=document.getElementById(scId),opts=sc.querySelectorAll('.scenario-opt'),fb=document.getElementById(scId+'-fb');
+opts.forEach(o=>o.classList.add('dis'));
+if(c){el.classList.add('correct');fb.textContent='✅ ¡Correcto! +15 pts. Siempre registrá todo en el CRM.';fb.className='scenario-fb show sfbok'}
+else{el.classList.add('wrong');opts.forEach(o=>{if(o.getAttribute('onclick')?.includes(',1)')){o.classList.remove('dis');o.classList.add('correct')}});
+  if(scId==='sc1')fb.textContent='❌ Hay que registrar TODO: contacto, empresa, deal, actividad y tarea de follow-up.';
+  else if(scId==='sc2')fb.textContent='❌ El timeline del contacto tiene todo el historial. Ahí ves qué habló Sol.';
+  else fb.textContent='❌ CRM → Deals, con filtros. Es la forma más directa.';
+  fb.className='scenario-fb show sfbbad'}
+upd();
+}
+
+// Matching
+function matchClick(el,side){
+  if(el.classList.contains('matched'))return;
+  if(side==='l'){
+    document.querySelectorAll('#ml .match-item').forEach(i=>i.classList.remove('selected'));
+    el.classList.add('selected');mSel.l=el;
+  }else{
+    document.querySelectorAll('#mr .match-item').forEach(i=>i.classList.remove('selected'));
+    el.classList.add('selected');mSel.r=el;
+  }
+  if(mSel.l&&mSel.r){
+    if(mSel.l.dataset.m===mSel.r.dataset.m){
+      mSel.l.classList.remove('selected');mSel.r.classList.remove('selected');
+      mSel.l.classList.add('matched');mSel.r.classList.add('matched');
+      mDone++;pts+=5;
+      if(mDone===mTotal){document.getElementById('matchScore').style.display='block';document.getElementById('matchScore').textContent=`✅ ¡Todo correcto! +${mTotal*5} pts`}
+    }else{
+      mSel.l.classList.add('wrong-flash');mSel.r.classList.add('wrong-flash');
+      const a=mSel.l,b2=mSel.r;
+      setTimeout(()=>{a.classList.remove('selected','wrong-flash');b2.classList.remove('selected','wrong-flash')},600);
+    }
+    mSel={l:null,r:null};
+    upd();
+  }
+}
+
+function st(el,i){
+  el.parentElement.querySelectorAll('.sn-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const p=el.closest('.sn').querySelectorAll('.sn-p');
+  p.forEach(x=>x.classList.remove('active'));p[i].classList.add('active');
+}
+
+function updFinal(){
+  const el=document.getElementById('finalS'),msg=document.getElementById('finalM');
+  const maxPts=70+25+45;// 7 quiz*10 + 5 match*5 + 3 scenarios*15
+  const pct=Math.round((pts/maxPts)*100);
+  el.textContent=pts+' pts ('+pct+'%)';
+  if(pct>=80){el.className='final-s great';msg.textContent='🔥 Excelente. Dominás los fundamentos. Nos vemos en la Sesión 2.'}
+  else if(pct>=50){el.className='final-s ok';msg.textContent='👍 Bien, pero repasá donde fallaste antes de la próxima sesión.'}
+  else{el.className='final-s low';msg.textContent='📖 Necesitás repasar. Volvé a las slides y revisá los conceptos.'}
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next()}if(e.key==='ArrowLeft'){e.preventDefault();prev()}});
+upd();
+</script>
+</body>
+</html>
